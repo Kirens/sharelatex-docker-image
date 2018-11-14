@@ -1,12 +1,7 @@
 # Makefile
+build:
+	docker build -f Dockerfile -t dtek/sharelatex .
 
 
-build-base:
-	docker build -f Dockerfile-base -t sharelatex/sharelatex-base .
-
-
-build-community:
-	docker build -f Dockerfile -t sharelatex/sharelatex .
-
-
-PHONY: build-base build-community
+run: build
+	docker-compose up

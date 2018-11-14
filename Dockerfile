@@ -100,9 +100,9 @@ RUN cd /var/www/sharelatex/clsi; \
 RUN tlmgr install scheme-full
 
 # Clone dtek-tex
-RUN git clone https://github.com/dtekcth/dtek-tex.git /tmp/dtek-tex; \
+RUN git clone https://github.com/Kirens/dtek-tex.git /tmp/dtek-tex; \
   cd /tmp/dtek-tex; \
-  git checkout master; \
+  git checkout report-wip; \
   mkdir -p /usr/local/texlive/texmf-local/tex/generic/images/; \
   cp $(find . -name '*.pdf') /usr/local/texlive/texmf-local/tex/generic/images/; \
   mkdir -p /usr/local/texlive/texmf-local/tex/latex/local/; \
