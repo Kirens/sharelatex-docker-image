@@ -3,15 +3,12 @@ services:
     sharelatex:
         restart: always
         container_name: sharelatex
-#        image: sharelatex/sharelatex
-        build:
-          context: .
-          dockerfile: Dockerfile-merged
+        image: dtek/sharelatex
         depends_on:
             - mongo
             - redis
         ports:
-            - 3000:80
+            - 14738:80
         links:
             - mongo
             - redis
@@ -22,18 +19,20 @@ services:
         environment:
             SHARELATEX_MONGO_URL: mongodb://mongo/sharelatex
             SHARELATEX_REDIS_HOST: redis
-            SHARELATEX_APP_NAME: DTek WebTeX
+            SHARELATEX_APP_NAME: dTeX
+            SHARELATEX_TEMPLATES_USER_ID: 5be99bf47dfd8700840f09ca
+            SHARELATEX_NEW_PROJECT_TEMPLATE_LINKS: '[ {"name":"Rapportmall","url":"/read/mkhxkwscqnvf"} ]'
 
             ## Set for SSL via nginx-proxy
             #VIRTUAL_HOST: 103.112.212.22
 
-            SHARELATEX_SITE_URL: localhost:3000
-            # SHARELATEX_NAV_TITLE: Our ShareLaTeX Instance
-            # SHARELATEX_HEADER_IMAGE_URL: http://somewhere.com/mylogo.png
+            SHARELATEX_SITE_URL: https://dtex.dtek.se
+            SHARELATEX_NAV_TITLE: dTeX
+            SHARELATEX_HEADER_IMAGE_URL: https://dtek.se/datalogo.svg
             SHARELATEX_ADMIN_EMAIL: dhack@dtek.se
 
-            # SHARELATEX_LEFT_FOOTER: '[{"text": "Powered by <a href=\"https://www.sharelatex.com\">ShareLaTeX</a> 2016"},{"text": "Another page I want to link to can be found <a href=\"here\">here</a>"} ]'
-            # SHARELATEX_RIGHT_FOOTER: '[{"text": "Hello I am on the Right"} ]'
+            SHARELATEX_LEFT_FOOTER: '[{"text": "Hacke typs&auml;tter snabbare"} ]'
+            SHARELATEX_RIGHT_FOOTER: '[{"text": "aspa sekreterare! ;)"} ]'
 
             # SHARELATEX_EMAIL_FROM_ADDRESS: "team@sharelatex.com"
 
