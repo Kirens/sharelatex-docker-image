@@ -1,30 +1,27 @@
 version: '2'
 services:
-    sharelatex:
-        restart: always
-        container_name: sharelatex
-        image: dtek/sharelatex
+    weblatex:
+        restart: unless-stopped
+        build: .
+        image: dtek/sharelatex:latest
         depends_on:
-            - mongo
-            - redis
+            - weblatex-mongo
+            - weblatex-redis
         ports:
             - 14738:80
         links:
-            - mongo
-            - redis
+            - weblatex-mongo
+            - weblatex-redis
         volumes:
-            - ~/sharelatex_data:/var/lib/sharelatex
+            - ../sharelatex_data:/var/lib/sharelatex
             - /var/run/docker.sock:/var/run/docker.sock
             #- /var/clsi/compiles:/var/www/sharelatex/clsi/compiles
         environment:
-            SHARELATEX_MONGO_URL: mongodb://mongo/sharelatex
-            SHARELATEX_REDIS_HOST: redis
+            SHARELATEX_MONGO_URL: mongodb://weblatex-mongo/weblatex
+            SHARELATEX_REDIS_HOST: weblatex-redis
             SHARELATEX_APP_NAME: dTeX
             SHARELATEX_TEMPLATES_USER_ID: 5be99bf47dfd8700840f09ca
             SHARELATEX_NEW_PROJECT_TEMPLATE_LINKS: '[ {"name":"Rapportmall","url":"/read/mkhxkwscqnvf"} ]'
-
-            ## Set for SSL via nginx-proxy
-            #VIRTUAL_HOST: 103.112.212.22
 
             SHARELATEX_SITE_URL: https://dtex.dtek.se
             SHARELATEX_NAV_TITLE: dTeX
@@ -34,74 +31,18 @@ services:
             SHARELATEX_LEFT_FOOTER: '[{"text": "Hacke typs&auml;tter snabbare"} ]'
             SHARELATEX_RIGHT_FOOTER: '[{"text": "aspa sekreterare! ;)"} ]'
 
-            # SHARELATEX_EMAIL_FROM_ADDRESS: "team@sharelatex.com"
-
-            # SHARELATEX_EMAIL_AWS_SES_ACCESS_KEY_ID:
-            # SHARELATEX_EMAIL_AWS_SES_SECRET_KEY:
-
-            # SHARELATEX_EMAIL_SMTP_HOST: smtp.mydomain.com
-            # SHARELATEX_EMAIL_SMTP_PORT: 587
-            # SHARELATEX_EMAIL_SMTP_SECURE: false
-            # SHARELATEX_EMAIL_SMTP_USER:
-            # SHARELATEX_EMAIL_SMTP_PASS:
-            # SHARELATEX_EMAIL_SMTP_TLS_REJECT_UNAUTH: true
-            # SHARELATEX_EMAIL_SMTP_IGNORE_TLS: false
-            # SHARELATEX_CUSTOM_EMAIL_FOOTER: "<div>This system is run by department x </div>"
-
-            ################
-            ## Server Pro ##
-            ################
-
-            # SANDBOXED_COMPILES: 'true'
-
-            # SANDBOXED_COMPILES_SIBLING_CONTAINERS: 'true'
-            # SANDBOXED_COMPILES_HOST_DIR: '/var/clsi/compiles'
-
-            ## Works with test LDAP server shown at bottom of docker compose
-            # SHARELATEX_LDAP_URL: 'ldap://ldap:389'
-            # SHARELATEX_LDAP_SEARCH_BASE: 'ou=people,dc=planetexpress,dc=com'
-            # SHARELATEX_LDAP_SEARCH_FILTER: '(uid={{username}})'
-            # SHARELATEX_LDAP_BIND_DN: 'cn=admin,dc=planetexpress,dc=com'
-            # SHARELATEX_LDAP_BIND_CREDENTIALS: 'GoodNewsEveryone'
-            # SHARELATEX_LDAP_EMAIL_ATT: 'mail'
-            # SHARELATEX_LDAP_NAME_ATT: 'cn'
-            # SHARELATEX_LDAP_LAST_NAME_ATT: 'sn'
-            # SHARELATEX_LDAP_UPDATE_USER_DETAILS_ON_LOGIN: 'true'
-
-            # SHARELATEX_TEMPLATES_USER_ID: "578773160210479700917ee5"
-
-            # SHARELATEX_PROXY_LEARN: "true"
-
-    mongo:
+    weblatex-mongo:
         restart: always
-        image: mongo
-        container_name: mongo
+        image: mongo:latest
         expose:
             - 27017
         volumes:
-            - ~/mongo_data:/data/db
+            - ../mongo_data:/data/db
 
-    redis:
+    weblatex-redis:
         restart: always
-        image: redis
-        container_name: redis
+        image: redis:latest
         expose:
             - 6379
         volumes:
-            - ~/redis_data:/data
-
-    # ldap:
-    #    restart: always
-    #    image: rroemhild/test-openldap
-    #    container_name: ldap
-    #    expose:
-    #        - 389
-# nginx-proxy:
-#     image: jwilder/nginx-proxy
-#     container_name: nginx-proxy
-#     ports:
-#       #- "80:80"
-#       - "443:443"
-#     volumes:
-#       - /var/run/docker.sock:/tmp/docker.sock:ro
-#       - /home/sharelatex/tmp:/etc/nginx/certs
+            - ../redis_data:/data
