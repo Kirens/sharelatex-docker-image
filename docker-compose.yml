@@ -1,6 +1,7 @@
 version: '2'
 services:
     weblatex:
+        container_name: weblatex
         restart: unless-stopped
         build: .
         image: dtek/sharelatex:latest
@@ -32,6 +33,7 @@ services:
             SHARELATEX_RIGHT_FOOTER: '[{"text": "aspa sekreterare! ;)"} ]'
 
     weblatex-mongo:
+        container_name: weblatex-mongodb
         restart: always
         image: mongo:latest
         expose:
@@ -40,6 +42,7 @@ services:
             - ../mongo_data:/data/db
 
     weblatex-redis:
+        container_name: weblatex-redis
         restart: always
         image: redis:latest
         expose:

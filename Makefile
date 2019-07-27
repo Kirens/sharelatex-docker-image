@@ -1,6 +1,6 @@
 # Makefile
 build:
-	docker build -f Dockerfile -t dtek/sharelatex
+	docker build -f Dockerfile -t dtek/sharelatex .
 
 
 run: build
